@@ -1,5 +1,4 @@
 NeoLib = NeoLib or {}
-NeoLib.Loader = NeoLib.Loader or {}
 
 --[[
     @author brv
@@ -13,50 +12,46 @@ local loadedFiles = 0
 local preloadedFiles = {}
 -- For banner size and responsivity
 local banner = ""
+-- Time
+local startTime
 
 -- Colors for printing
 local baseColor = Color(255, 255, 255)
 local clientColor = Color(214, 137, 73)
 local serverColor = Color(88, 189, 230)
 local sharedColor = Color(161, 99, 212)
--- Colors for banner
-local nameColor = Color(161, 99, 212)
-local versionColor = Color(161, 99, 212)
-
--- Get Author
-local function getAuthor(directory)
-    local author
-    if string.match(directory, "sh") then author = "shared"
-    elseif string.match(directory, "cl") then author = "client"
-    else author = "server" end
-    return author
-end
+local completeColor = Color(84, 185, 143)
 
 -- Print beautiful messages
 local function PrintC(message, prefix)
-    if prefix then
-        prefix = "["..prefix.."] "
-    else
-        prefix = ""
-    end
-    if SERVER then
-        MsgC(baseColor, "[NeoLib] "..prefix..message.."\n")
+    if prefix then prefix = "["..prefix.."] " else prefix = "" end
+    if string.match(prefix, "SERVER") then
+        MsgC(baseColor, "[NeoLib] ", serverColor, prefix, baseColor, message.."\n")
+    elseif string.match(prefix, "CLIENT") then
+        MsgC(baseColor, "[NeoLib] ", clientColor, prefix, baseColor, message.."\n")
+    elseif string.match(prefix, "SHARED") then
+        MsgC(baseColor, "[NeoLib] ", sharedColor, prefix, baseColor, message.."\n")
+    elseif string.match(prefix, "COMPLETE") then
+        MsgC(baseColor, "[NeoLib] ", completeColor, prefix, baseColor, message.."\n")
     else
         MsgC(baseColor, "[NeoLib] "..prefix..message.."\n")
     end
 end
 
 -- Preloader (to load important things such as configs and stuff before launching core stuff)
-function NeoLib.Loader.Preload(directory, file, log)
+function NeoLib.Preload(directory, file, log)
     preloadedFiles[file] = true
-    NeoLib.Loader.LoadFile(directory, file, log)
+    NeoLib.LoadFile(directory, file, log)
 end
 
 -- Load a file from a given directory and file
-function NeoLib.Loader.LoadFile(directory, file, log)
+function NeoLib.LoadFile(directory, file, log)
     loadedFiles = loadedFiles + 1
     if log then
-        local author = getAuthor(directory)
+        local author
+        if string.match(directory, "sh") then author = "shared"
+        elseif string.match(directory, "cl") then author = "client"
+        else author = "server" end
         PrintC("Loaded "..file, string.upper(author))
     end
     if SERVER then
@@ -66,27 +61,28 @@ function NeoLib.Loader.LoadFile(directory, file, log)
 end
 
 -- Load all files from a given directory
-function NeoLib.Loader.LoadAllFiles(directory)
+function NeoLib.LoadAllFiles(directory)
     local files, dirs = file.Find(directory.."*", "LUA")
     -- Loop trough all files in the current dir
     for _, file in ipairs(files) do
         if string.match(file, ".lua") and !preloadedFiles[file] then
-            NeoLib.Loader.LoadFile(directory, file, true)
+            NeoLib.LoadFile(directory, file, true)
         end
     end
     -- Recursivity
     for _, dir in ipairs(dirs) do
-        NeoLib.Loader.LoadAllFiles(directory..dir.."/")
+        NeoLib.LoadAllFiles(directory..dir.."/")
     end
 end
 
-function NeoLib.Loader.Initialize(name, version, preload)
+function NeoLib.Initialize(name, version, preload)
     -- Init vars
+    startTime = os.time()
     loadedFiles = 0
     preloadedFiles = {}
     preload = preload or {}
     banner = "=============== "..name.." | "..version.." ==============="
-    name = string.lower(name)
+    --name = string.lower(name)
     -- Start of banner
     PrintC(banner)
 
@@ -94,24 +90,24 @@ function NeoLib.Loader.Initialize(name, version, preload)
     for _, content in pairs(preload) do
         -- Automaticlly take care of not including server side script
         if CLIENT and !string.match(content[1], "/sv/") then
-            NeoLib.Loader.Preload(content[1], content[2], true)
+            NeoLib.Preload(content[1], content[2], true)
         elseif SERVER then
-            NeoLib.Loader.Preload(content[1], content[2], true)
+            NeoLib.Preload(content[1], content[2], true)
         end
     end
 
     -- Shared
-    NeoLib.Loader.LoadAllFiles(string.lower(name).."/sh/")
+    NeoLib.LoadAllFiles(string.lower(name).."/sh/")
 
     -- Server
     if SERVER then
-        NeoLib.Loader.LoadAllFiles(string.lower(name).."/sv/")
+        NeoLib.LoadAllFiles(string.lower(name).."/sv/")
     end
 
     -- Client
-    NeoLib.Loader.LoadAllFiles(string.lower(name).."/cl/")
+    NeoLib.LoadAllFiles(string.lower(name).."/cl/")
 
     --end of banner
-    PrintC("Loaded "..loadedFiles.." files !", "COMPLETE")
+    PrintC("Loaded "..loadedFiles.." files ! Tooked "..os.difftime(os.time(), startTime).." second(s)", "COMPLETE")
     PrintC(string.rep("=", #banner).."\n")
 end

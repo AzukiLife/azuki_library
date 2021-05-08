@@ -3,7 +3,11 @@
 This library is a pretty and clean way to load lua files for GMod server (also support client).
 So you don't have to put "include" and "AddCSLuaFile" everywhere!
 
-![Pretty loader exemple](https://octodex.github.com/images/yaktocat.png)
+Server view :
+![Server View](https://i.imgur.com/Zsd1wKz.png)
+
+Client view :
+![Client View](https://i.imgur.com/CbORL6a.png)
 
 ## How I implement it ?
 
@@ -14,21 +18,22 @@ So you don't have to put "include" and "AddCSLuaFile" everywhere!
 local addon_name = "name"
 local addon_version = "ver"
 
-if NeoLib and NeoLib.Loader then 
+if NeoLib and NeoLib then 
     --[[
         If your system need to load certain files first, add them like this in preload table.
         You can comment local preload... and also remove the third arguement of Initialize call
     ]] 
     local preload = {
+        -- {folder, file}
         {"name/sh/", "config.lua"}
     }
-    NeoLib.Loader.Initialize(addon_name, addon_version, preload)
+    NeoLib.Initialize(addon_name, addon_version, preload)
 else
     print("[NeoLib] Cannot load "..addon_name.." "..addon_version.." ! Library not found...")    
 end
 ```
 - After that, move everything in `youraddonname/`
-    - Also, create `youraddonname/sv/`, `youraddonname/sh/`, `youraddonname/cl/` (Keep it that way, even if there is no file in cl, sh or sv)
+    - Also, create `youraddonname/sv/`, `youraddonname/sh/`, `youraddonname/cl/` (If you need all of them)
 - Place server scripts in `youraddonname/sv/` and so on for others (client, shared)
 - For each client file, you have to add this line at the top: 
 ```lua

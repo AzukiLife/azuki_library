@@ -1,6 +1,3 @@
-NeoLib = NeoLib or {}
-NeoLib.Loader = NeoLib.Loader or {}
-
--- Simple loader here, just to load the lib
-include("lib/sh/utils.lua")
-AddCSLuaFile("lib/sh/utils.lua")
+-- Load loader_util to server and client (shared)
+include("lib/sh/loader_util.lua")
+AddCSLuaFile("lib/sh/loader_util.lua")
