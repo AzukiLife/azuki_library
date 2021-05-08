@@ -4,10 +4,10 @@ This library is a pretty and clean way to load lua files for GMod server (also s
 So you don't have to put "include" and "AddCSLuaFile" everywhere!
 
 Server view :
-![Server View](https://i.imgur.com/Zsd1wKz.png)
+[Server View](https://i.imgur.com/Zsd1wKz.png)
 
 Client view :
-![Client View](https://i.imgur.com/CbORL6a.png)
+[Client View](https://i.imgur.com/CbORL6a.png)
 
 ## How I implement it ?
 
@@ -45,7 +45,7 @@ if CLIENT then return end
 ```
 - Finally, you should have something like this : 
 
-![Example](https://i.imgur.com/otc58l8.gif)
+[Example](https://i.imgur.com/otc58l8.gif)
 
 ## Keep in mind
 
