@@ -14,7 +14,7 @@ So you don't have to put "include" and "AddCSLuaFile" everywhere!
 - Place server scripts in `youraddonname/sv/` and so on for others (client, shared)
 - For each client file, you have to add this line at the top: ```if SERVER then return end```
 - And in every server file you have to add: ```if CLIENT then return end```
-- Finally, you should have something like this : ![Example](https://i.gyazo.com/4590e9bd4e98bc3acc1697377596db06.mp4)
+- Finally, you should have something like this : ![Example](https://i.imgur.com/otc58l8.gif)
 
 ## Keep in mind
 
