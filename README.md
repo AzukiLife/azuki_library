@@ -45,7 +45,7 @@ if CLIENT then return end
 ```
 - Finally, you should have something like this : 
 
-[Example](https://i.imgur.com/otc58l8.gif)
+![Example](https://i.imgur.com/otc58l8.gif)
 
 ## Keep in mind
 
