@@ -44,7 +44,7 @@ local function getDirSize(directory)
         end
     end
     for _, dir in ipairs(dirs) do
-        getDirSize(directory..dir.."/")
+        size = getDirSize(directory..dir.."/")
     end
     return size
 end
@@ -94,7 +94,6 @@ function NeoLib.Initialize(name, version, preload)
     -- Only print in client's console if client or shared folders have files in.
     if CLIENT and getDirSize(string.lower(name).."/sh/") == 0 and getDirSize(string.lower(name).."/cl/") == 0 then return end
     local banner = "=============== "..name.." | "..version.." ==============="
-    --name = string.lower(name)
     -- Start of banner
     PrintC(banner)
 

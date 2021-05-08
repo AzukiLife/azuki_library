@@ -20,7 +20,7 @@ Client view :
 local addon_name = "name"
 local addon_version = "ver"
 
-if NeoLib and NeoLib then 
+if NeoLib then 
     --[[
         If your system need to load certain files first, add them like this in preload table.
         You can comment local preload... and also remove the third arguement of Initialize call
@@ -31,7 +31,7 @@ if NeoLib and NeoLib then
     }
     NeoLib.Initialize(addon_name, addon_version, preload)
 else
-    print("[NeoLib] Cannot load "..addon_name.." "..addon_version.." ! Library not found...")    
+    print("Failed loading "..addon_name.." (Missing NeoLib)")    
 end
 ```
 - After that, move everything in `youraddonname/`
@@ -77,4 +77,5 @@ local fonts = {
 }
 NeoLib.RegisterFont(fonts)
 ```
-❓ What should I add next
+📝 Icon Library *Personnal use, you can get rid of this part*
+📝 Some Material *Personnal use, you can get rid of this part*
