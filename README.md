@@ -53,3 +53,26 @@ if CLIENT then return end
 
 This addon is mainly for my personnal server. If you only need loader option only keep this `lib/sh/loader_util.lua`, you can get rid of anything else.
 Also edit `autorun/loader.lua` and remove every include you don't need!
+
+## Planned Features
+
+📝 Font Registering in a single line 
+```lua 
+NeoLib.RegisterFont("Open Sans Light", "OSL:YourAddon", 14, 500)```
+📝 Bulk Font Registering
+```lua 
+-- Your font list
+local fonts = {
+    "Open Sans Regular" : {
+        "OSR:YourAddon",
+        14,
+        500
+    },    
+    "Open Sans Bold" : {
+        "OSB:YourAddon",
+        16,
+        500
+    }
+}
+NeoLib.RegisterFont(fonts)```
+❓ What should I add next
