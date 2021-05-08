@@ -10,10 +10,6 @@ NeoLib = NeoLib or {}
 local loadedFiles = 0
 -- Preloaded file table
 local preloadedFiles = {}
--- For banner size and responsivity
-local banner = ""
--- Time
-local startTime
 
 -- Colors for printing
 local baseColor = Color(255, 255, 255)
@@ -36,6 +32,21 @@ local function PrintC(message, prefix)
     else
         MsgC(baseColor, "[NeoLib] "..prefix..message.."\n")
     end
+end
+
+-- Return number of lua files in given directory
+local function getDirSize(directory)
+    local size = 0
+    local files = file.Find(directory.."*", "LUA")
+    for _, file in ipairs(files) do
+        if string.match(file, ".lua") then
+            size = size + 1
+        end
+    end
+    for _, dir in ipairs(dirs) do
+        getDirSize(directory..dir.."/")
+    end
+    return size
 end
 
 -- Preloader (to load important things such as configs and stuff before launching core stuff)
@@ -77,11 +88,12 @@ end
 
 function NeoLib.Initialize(name, version, preload)
     -- Init vars
-    startTime = os.time()
     loadedFiles = 0
     preloadedFiles = {}
     preload = preload or {}
-    banner = "=============== "..name.." | "..version.." ==============="
+    -- Only print in client's console if client or shared folders have files in.
+    if CLIENT and getDirSize(string.lower(name).."/sh/") == 0 and getDirSize(string.lower(name).."/cl/") == 0 then return end
+    local banner = "=============== "..name.." | "..version.." ==============="
     --name = string.lower(name)
     -- Start of banner
     PrintC(banner)
@@ -108,6 +120,6 @@ function NeoLib.Initialize(name, version, preload)
     NeoLib.LoadAllFiles(string.lower(name).."/cl/")
 
     --end of banner
-    PrintC("Loaded "..loadedFiles.." files ! Tooked "..os.difftime(os.time(), startTime).." second(s)", "COMPLETE")
+    PrintC("Loaded "..loadedFiles.." files !", "COMPLETE")
     PrintC(string.rep("=", #banner).."\n")
 end
