@@ -58,7 +58,8 @@ Also edit `autorun/loader.lua` and remove every include you don't need!
 
 📝 Font Registering in a single line 
 ```lua 
-NeoLib.RegisterFont("Open Sans Light", "OSL:YourAddon", 14, 500)```
+NeoLib.RegisterFont("Open Sans Light", "OSL:YourAddon", 14, 500)
+```
 📝 Bulk Font Registering
 ```lua 
 -- Your font list
@@ -74,5 +75,6 @@ local fonts = {
         500
     }
 }
-NeoLib.RegisterFont(fonts)```
+NeoLib.RegisterFont(fonts)
+```
 ❓ What should I add next
