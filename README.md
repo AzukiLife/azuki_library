@@ -7,14 +7,40 @@ So you don't have to put "include" and "AddCSLuaFile" everywhere!
 
 ## How I implement it ?
 
-- You have to create a loader in `autorun/` folder
+- You have to create a loader file in `autorun/` folder
     - Like so `autorun/loader.lua`
+- Loader content :
+```lua
+local addon_name = "name"
+local addon_version = "ver"
+
+if NeoLib and NeoLib.Loader then 
+    --[[
+        If your system need to load certain files first, add them like this in preload table.
+        You can comment local preload... and also remove the third arguement of Initialize call
+    ]] 
+    local preload = {
+        {"name/sh/", "config.lua"}
+    }
+    NeoLib.Loader.Initialize(addon_name, addon_version, preload)
+else
+    print("[NeoLib] Cannot load "..addon_name.." "..addon_version.." ! Library not found...")    
+end
+```
 - After that, move everything in `youraddonname/`
     - Also, create `youraddonname/sv/`, `youraddonname/sh/`, `youraddonname/cl/` (Keep it that way, even if there is no file in cl, sh or sv)
 - Place server scripts in `youraddonname/sv/` and so on for others (client, shared)
-- For each client file, you have to add this line at the top: ```if SERVER then return end```
-- And in every server file you have to add: ```if CLIENT then return end```
-- Finally, you should have something like this : ![Example](https://i.imgur.com/otc58l8.gif)
+- For each client file, you have to add this line at the top: 
+```lua
+if SERVER then return end
+```
+- And in every server file you have to add: 
+```lua
+if CLIENT then return end
+```
+- Finally, you should have something like this : 
+
+![Example](https://i.imgur.com/otc58l8.gif)
 
 ## Keep in mind
 
