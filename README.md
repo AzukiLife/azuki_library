@@ -34,7 +34,6 @@ local addon_version = "ver"
 if NeoLib then 
     --[[
         If your system need to load certain files first, add them like this in preload table.
-        You can comment local preload... and also remove the third arguement of Initialize call
         You can load anything from client to server, file will load properly
     ]] 
     local preload = {
