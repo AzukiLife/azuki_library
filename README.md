@@ -56,4 +56,4 @@ Also edit `autorun/loader.lua` and remove every include you don't need!
 
 ## Planned Features
 
-[] Load folders of your choice (you can rename `sv` to `server`, or add any special folder like `modules`)
+- [ ] Load folders of your choice (you can rename `sv` to `server`, or add any special folder like `modules`)
