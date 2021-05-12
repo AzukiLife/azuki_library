@@ -56,26 +56,4 @@ Also edit `autorun/loader.lua` and remove every include you don't need!
 
 ## Planned Features
 
-📝 Font Registering in a single line 
-```lua 
-NeoLib.RegisterFont("Open Sans Light", "OSL:YourAddon", 14, 500)
-```
-📝 Bulk Font Registering
-```lua 
--- Your font list
-local fonts = {
-    "Open Sans Regular" : {
-        "OSR:YourAddon",
-        14,
-        500
-    },    
-    "Open Sans Bold" : {
-        "OSB:YourAddon",
-        16,
-        500
-    }
-}
-NeoLib.RegisterFont(fonts)
-```
-📝 Icon Library *Personnal use, you can get rid of this part*
-📝 Some Material *Personnal use, you can get rid of this part*
+[] Load folders of your choice (you can rename `sv` to `server`, or add any special folder like `modules`)
