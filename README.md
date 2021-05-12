@@ -54,9 +54,16 @@ if CLIENT then return end
 This addon is mainly for my personnal server. If you only need loader option only keep this `lib/sh/loader_util.lua`, you can get rid of anything else.
 Also edit `autorun/loader.lua` and remove every include you don't need!
 
-## Planned Features
+## Features
 
+- Load addon with beautiful message for both client and shared
+- Make you addon folder look more professionnal
+- Every file is properly loaded
+- No display for client if there is no shared/client file
+
+## TODO
+
+- [x] Do not include clients file in server but count them anyway
 - [ ] Load folders of your choice (like `modules`) with a specified destination (server, client or shared)
-- [ ] Count how many addons were loaded
-- [ ] Do not include clients file in server but count them anyway
+
 
