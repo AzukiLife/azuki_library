@@ -24,12 +24,15 @@ if NeoLib then
     --[[
         If your system need to load certain files first, add them like this in preload table.
         You can comment local preload... and also remove the third arguement of Initialize call
+        You can load anything from client to server, file will load properly
     ]] 
     local preload = {
         -- {folder, file}
-        {"name/sh/", "config.lua"}
+        {"name/sh/", "config.lua"} -- Also accept "/sh/" for folder name but not "sh" or "sh/"
     }
+
     NeoLib.Initialize(addon_name, addon_version, preload)
+    -- If no preload, you can get rid of the last argument or set it as nil
 else
     print("Failed loading "..addon_name.." (Missing NeoLib)")    
 end
@@ -37,14 +40,6 @@ end
 - After that, move everything in `youraddonname/`
     - Also, create `youraddonname/sv/`, `youraddonname/sh/`, `youraddonname/cl/` (If you need all of them)
 - Place server scripts in `youraddonname/sv/` and so on for others (client, shared)
-- For each client file, you have to add this line at the top: 
-```lua
-if SERVER then return end
-```
-- And in every server file you have to add: 
-```lua
-if CLIENT then return end
-```
 - Finally, you should have something like this : 
 
 ![Example](https://i.imgur.com/otc58l8.gif)

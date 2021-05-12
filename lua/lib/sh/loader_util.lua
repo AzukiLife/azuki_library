@@ -37,7 +37,7 @@ end
 -- Return number of lua files in given directory
 local function getDirSize(directory)
     local size = 0
-    local files = file.Find(directory.."*", "LUA")
+    local files, dirs = file.Find(directory.."*", "LUA")
     for _, file in ipairs(files) do
         if string.match(file, ".lua") then
             size = size + 1
@@ -58,8 +58,8 @@ end
 -- Load a file from a given directory and file
 function NeoLib.LoadFile(directory, file, log)
     loadedFiles = loadedFiles + 1
-    if log then
-        local author
+    local author
+    if log then  
         if string.match(directory, "sh") then author = "shared"
         elseif string.match(directory, "cl") then author = "client"
         else author = "server" end
@@ -68,6 +68,7 @@ function NeoLib.LoadFile(directory, file, log)
     if SERVER then
         AddCSLuaFile(directory..file)
     end
+    if SERVER and author and author == "client" then return end
     include(directory..file)
 end
 
@@ -86,7 +87,7 @@ function NeoLib.LoadAllFiles(directory)
     end
 end
 
-function NeoLib.Initialize(name, version, preload)
+function NeoLib.Initialize(name, version, preload, custom)
     -- Init vars
     loadedFiles = 0
     preloadedFiles = {}
@@ -96,29 +97,33 @@ function NeoLib.Initialize(name, version, preload)
     local banner = "=============== "..name.." | "..version.." ==============="
     -- Start of banner
     PrintC(banner)
-
     -- Preload
-    for _, content in pairs(preload) do
-        -- Automaticlly take care of not including server side script
-        if CLIENT and !string.match(content[1], "/sv/") then
-            NeoLib.Preload(content[1], content[2], true)
-        elseif SERVER then
-            NeoLib.Preload(content[1], content[2], true)
+    if preload then
+        for _, content in pairs(preload) do
+            -- Place addon name if forgotten in the addon loader script
+            local folder = content[1]
+            if !string.match(folder, string.lower(name)) then folder = string.lower(name)..folder end
+            local file = content[2]
+            -- Automaticlly take care of not including server side script
+            if CLIENT and !string.match(content[1], "/sv/") then
+                NeoLib.Preload(folder, file, true)
+            elseif SERVER then
+                NeoLib.Preload(folder, file, true)
+            end
         end
     end
-
     -- Shared
     NeoLib.LoadAllFiles(string.lower(name).."/sh/")
-
     -- Server
     if SERVER then
         NeoLib.LoadAllFiles(string.lower(name).."/sv/")
     end
-
     -- Client
     NeoLib.LoadAllFiles(string.lower(name).."/cl/")
-
     --end of banner
     PrintC("Loaded "..loadedFiles.." files !", "COMPLETE")
     PrintC(string.rep("=", #banner).."\n")
+    if NeoLib.Config.CountAddon then
+        loadedAddonsCount = loadedAddonsCount+1;
+    end
 end
