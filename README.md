@@ -56,7 +56,7 @@ Also edit `autorun/loader.lua` and remove every include you don't need!
 
 ## Planned Features
 
-- [ ] Load folders of your choice (you can rename `sv` to `server`, or add any special folder like `modules`)
+- [ ] Load folders of your choice (like `modules`) with a specified destination (server, client or shared)
 - [ ] Count how many addons were loaded
-- [ ] Do not include clients file in server
+- [ ] Do not include clients file in server but count them anyway
 
