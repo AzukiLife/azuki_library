@@ -57,7 +57,7 @@ end
 ## Keep in mind
 
 This addon is mainly for my personnal server. If you only need loader option only keep this `lib/sh/loader_util.lua`, you can get rid of anything else.
-Also edit `autorun/loader.lua` and remove every include you don't need!
+Also edit `autorun/loader.lua` and remove every include you don't need !
 
 ## TODO
 
