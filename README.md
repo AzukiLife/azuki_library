@@ -63,5 +63,5 @@ Also edit `autorun/loader.lua` and remove every include you don't need !
 
 - [x] Do not include clients file in server but count them anyway
 - [ ] Load folders of your choice (like `modules`) with a specified destination (server, client or shared)
-
+- [ ] New function to preload a file (see main)
 
