@@ -25,7 +25,7 @@ local completeColor = Color(84, 185, 143)
 
 -- Print beautiful messages
 local function PrintC(message, prefix)
-    if prefix then prefix = "["..prefix.."] " else prefix = "" end
+    if prefix then prefix = "("..prefix..") " else prefix = "" end
     if string.match(prefix, "SERVER") then
         MsgC(baseColor, "[NeoLib] ", serverColor, prefix, baseColor, message.."\n")
     elseif string.match(prefix, "CLIENT") then
@@ -39,21 +39,6 @@ local function PrintC(message, prefix)
     end
 end
 
--- Return number of lua files in given directory
-local function GetDirectorySize(directory)
-    local size = 0
-    local files, dirs = file.Find(directory.."*", "LUA")
-    for _, file in ipairs(files) do
-        if string.match(file, ".lua") then
-            size = size + 1
-        end
-    end
-    for _, dir in ipairs(dirs) do
-        size = GetDirectorySize(directory..dir.."/")
-    end
-    return size
-end
-
 -- Load a file from a given directory and file
 function NeoLib.LoadFile(directory, file, log)
     loadedFiles = loadedFiles + 1
@@ -65,15 +50,11 @@ function NeoLib.LoadFile(directory, file, log)
         PrintC("Loaded "..file, string.upper(author))
     end
 
-    -- /!\ 
-    -- region - This portion of code is maybe faulty
     if SERVER then
         AddCSLuaFile(directory..file)
     end
     if SERVER and author and author == "client" then return end
-    include(directory..file)
-    -- endregion
-    
+    include(directory..file)   
 end
 
 -- Load all files from a given directory
@@ -111,15 +92,12 @@ function NeoLib.Initialize(addon_name, addon_version, preload, custom)
     preload = preload or {}
 
     -- Dirs Name
-    local shared_dir = string.lower(addon_name).."/sh/"
-    local client_dir = string.lower(addon_name).."/cl/"
-    local server_dir = string.lower(addon_name).."/sv/"
+    shared_dir = string.lower(addon_name).."/sh/"
+    client_dir = string.lower(addon_name).."/cl/"
+    server_dir = string.lower(addon_name).."/sv/"
 
     -- Only display messages if directories exsist
-    -- OLD : if CLIENT and GetDirectorySize(string.lower(addon_name).."/sh/") == 0 and GetDirectorySize(string.lower(addon_name).."/cl/") == 0 then return end
     if CLIENT and not file.Exists(client_dir) and not file.Exists(shared_dir) then return end
-
-
     local banner = "=============== "..addon_name.." | "..addon_version.." ==============="
     -- Start of banner
     PrintC(banner)
@@ -136,7 +114,4 @@ function NeoLib.Initialize(addon_name, addon_version, preload, custom)
     --end of banner
     PrintC("Loaded "..loadedFiles.." files !", "COMPLETE")
     PrintC(string.rep("=", #banner).."\n")
-    if NeoLib.Config.CountAddon then
-        LoadedAddonsCount = LoadedAddonsCount + 1;
-    end
 end
