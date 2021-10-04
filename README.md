@@ -14,22 +14,21 @@ Client view :
 
 ## Features
 
-Little list of features (more to come)
-- Optimized code
-- Preload certain files (eg. config files)
-- Load addon with beautiful message for both client and shared
+- Clean loading sequense
+- Preload certain files (eg config files)
+- Load addon with beautiful message for both client and server
 - Make you addon folder look more professionnal
 - Every file is properly loaded
-- No display for client if there is no shared/client file
+- Module system
 
-## Installation
+## Use this lib
 
-- You have to create a loader file in `autorun/` folder
-    - Like so `autorun/loader.lua`
-- Loader content :
+- First, place the loader code into `autorun/` name it as you like 
+    - Like so `autorun/addon_loader.lua`
+    - Content : 
 ```lua
-local addon_name = "name"
-local addon_version = "ver"
+local addon_name = "addon_name" -- eg ULX
+local addon_version = "addon_version" -- eg 1.0
 
 if NeoLib then 
     --[[
@@ -40,29 +39,39 @@ if NeoLib then
         -- {folder, file}
         {"name/sh/", "config.lua"} -- Also accept "/sh/" for folder name but not "sh" or "sh/"
     }
-
+    --[[
+        If your addon handle modules, you can include the path to the module
+        Modules have to be located under (lua/) modules/<name>
+        /!\ Module manager will load server, shared and client files in their respective directory (sv, sh, cl)
+    ]]
+    local module = {
+        -- {name, version, description}
+        { "name", "1.0", "Description" }, --example 1
+        { "name_2", "dev-0.6", "Another Description"} -- example 2
+    }
     NeoLib.Initialize(addon_name, addon_version, preload)
-    -- If no preload, you can get rid of the last argument or set it as nil
 else
-    print("Failed loading "..addon_name.." (Missing NeoLib)")    
+    print("[!] Cannot load "..addon_name.." (Missing Neo Lib)")    
 end
 ```
-- After that, move everything in `youraddonname/`
-    - Also, create `youraddonname/sv/`, `youraddonname/sh/`, `youraddonname/cl/` (If you need all of them)
-- Place server scripts in `youraddonname/sv/` and so on for others (client, shared)
+- Create `addon_name/sv/`, `addon_name/sh/` and `addon_name/cl/` (you can rid of any of them if needed!)
 - Finally, you should have something like this : 
 
 ![Example](https://i.imgur.com/otc58l8.gif)
 
-## Keep in mind
+## Modules (TODO)
 
-This addon is mainly for my personnal server. If you only need loader option only keep this `lib/sh/loader_util.lua`, you can get rid of anything else.
-Also edit `autorun/loader.lua` and remove every include you don't need !
+Modules works exaclty the same as your addon is working. Its like a sub-addon you don't want to separate from your main addon.
+You can imagine something like DLCs (additionnal content for your addon) that a player can install, all yours modules are base on the main addon, but the main addon can work without them.
+
+You can easily create a module:
+- Add `module/module_name` directory (You can add as many as you want)
+- Create `module/module_name/sv/`, `module/module_name/sh/` and `module/module_name/cl/` (you can rid of any of them if needed!)
+- ⚠️ **WARNING** do not put your module in `addon/module_name/...`! Or your files will not be loaded
 
 ## TODO
 
-- [x] Do not include clients file in server but count them anyway
-- [ ] Load folders of your choice (like `modules`) with a specified destination (server, client or shared)
+- [ ] Rework File Management System
 - [ ] New function to preload a file (see main)
-- [ ] Rework File Management System (remove sh folder)
+
 
