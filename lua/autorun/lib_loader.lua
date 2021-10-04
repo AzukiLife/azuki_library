@@ -3,7 +3,6 @@ NeoLib = NeoLib or {}
 --[[
     @author brv
     @date 03/10/2021
-    @description Load addons with ease
 ]]
 
 -- Counter for all files loaded
@@ -53,11 +52,6 @@ local function GetDirectorySize(directory)
         size = GetDirectorySize(directory..dir.."/")
     end
     return size
-end
-
--- Preloader (to load important things such as configs and stuff before launching core stuff)
-function NeoLib.Preload(directory, file, log)
-
 end
 
 -- Load a file from a given directory and file
@@ -117,7 +111,7 @@ function NeoLib.Initialize(addon_name, addon_version, preload, custom)
     preload = preload or {}
 
     -- Dirs Name
-    local shared_dir = string.lower(addon_name)
+    local shared_dir = string.lower(addon_name).."/sh/"
     local client_dir = string.lower(addon_name).."/cl/"
     local server_dir = string.lower(addon_name).."/sv/"
 
@@ -130,15 +124,15 @@ function NeoLib.Initialize(addon_name, addon_version, preload, custom)
     -- Start of banner
     PrintC(banner)
     -- Preload
-    NeoLib.Preload(addon_name, addon_version, preload)
+    NeoLib.Preload(addon_name, preload)
     -- Shared
-    NeoLib.LoadAllFiles(string.lower(addon_name).."/sh/")
+    NeoLib.LoadAllFiles(share_dir)
     -- Server
     if SERVER then
-        NeoLib.LoadAllFiles(string.lower(addon_name).."/sv/")
+        NeoLib.LoadAllFiles(server_dir)
     end
     -- Client
-    NeoLib.LoadAllFiles(string.lower(addon_name).."/cl/")
+    NeoLib.LoadAllFiles(client_dir)
     --end of banner
     PrintC("Loaded "..loadedFiles.." files !", "COMPLETE")
     PrintC(string.rep("=", #banner).."\n")
