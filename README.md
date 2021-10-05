@@ -19,16 +19,12 @@ Client view :
 - Load addon with beautiful message for both client and server
 - Make you addon folder look more professionnal
 - Every file is properly loaded
-- Module system
 
 ## Use this lib
 
 - First, place the loader code into `autorun/` name it as you like 
     - Like so `autorun/addon_loader.lua`
-    - Content : 
-```lua
-in dev... 🔨 
-```
+    - Content is [here](https://github.com/NeoTokyoRP/neo_lib/blob/master/addon_loader.lua) (You should edit the default fields to match your addon)
 - Create `addon_name/sv/`, `addon_name/sh/` and `addon_name/cl/` (you can rid of any of them if needed!)
 - Finally, you should have something like this : 
 
@@ -46,8 +42,8 @@ You can easily create a module:
 
 ## TODO
 
-- [ ] Rework File Management System
-- [ ] New function to preload a file (see main)
+- [ ] Preload array working with path, not only file name
+- [x] New function to preload a file (see main) 
+- [x] Move addon_loader code to a file in the repo
 - [ ] Make so files in addons managed by the loader can have the same name (from different addon)
-
-
+- [ ] Modules manager system

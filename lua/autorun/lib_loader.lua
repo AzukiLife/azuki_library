@@ -49,7 +49,6 @@ function NeoLib.LoadFile(directory, file, log)
         else author = "server" end
         PrintC("Loaded "..file, string.upper(author))
     end
-
     if SERVER then
         AddCSLuaFile(directory..file)
     end
@@ -72,15 +71,18 @@ function NeoLib.LoadDirectory(directory)
 end
 
 -- Preload Function
-function NeoLib.PreloadFile(name, preload)
-    if not preload then return end
+function NeoLib.PreloadFile(addon_name, preload)
+    if not preload then return end -- Preload = nil
     for _, content in pairs(preload) do
-        -- Place addon name if forgotten in the addon loader script
-        local folder = content[1]
-        if !string.match(folder, string.lower(name)) then folder = string.lower(name)..folder end
+        local target = content[1]
         local file = content[2]
+        if target != "sh" or target != "sv" or target != "cl" then
+            print("[!] Failed to preload "..file.." because target '"..target.."' is invalid")
+            return
+        end
+        target = addon_name.."/"..target.."/"
         preloadedFiles[file] = true
-        NeoLib.LoadFile(folder, file, true)
+        NeoLib.LoadFile(target, file, true)
     end
 end
 
@@ -97,7 +99,7 @@ function NeoLib.Initialize(addon_name, addon_version, preload, custom)
 
     -- Only display messages if directories exsist
     if CLIENT and not file.Exists(client_dir) and not file.Exists(shared_dir) then return end
-    local banner = "=============== "..addon_name.." | "..addon_version.." ==============="
+    local banner = "=============== "..addon_name.." - "..addon_version.." ==============="
     -- Start of banner
     PrintC(banner)
     -- Preload
@@ -111,6 +113,7 @@ function NeoLib.Initialize(addon_name, addon_version, preload, custom)
     -- Client
     NeoLib.LoadDirectory(client_dir)
     --end of banner
-    PrintC("Loaded "..loadedFiles.." files !", "COMPLETE")
+    PrintC("Preloaded "..#preloadedFiles.." lua files", "COMPLETE")
+    PrintC("Loaded "..loadedFiles.." lua files", "COMPLETE")
     PrintC(string.rep("=", #banner).."\n")
 end

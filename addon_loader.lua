@@ -17,8 +17,8 @@ if NeoLib then
         Note: File loads one time only, don't worry
     ]] 
     local preload = {
-        -- {folder, file}
-        {"addon_name/sh/", "config.lua"} -- Also accept "/sh/" for folder name but not "sh" or "sh/"
+        -- {target, file}
+        {"sh", "config.lua"} -- First parameter only accept "sh", "sv" and "cl"
     }
 
     NeoLib.Initialize(addon_name, addon_version, preload)
