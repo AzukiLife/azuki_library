@@ -9,12 +9,8 @@ NeoLib = NeoLib or {}
 local loadedFiles = 0
 -- Preloaded file table
 local preloadedFiles = {}
--- Folders name
-local shared_dir = nil
-local client_dir = nil
-local server_dir = nil
 
-print("[~] New Neo Lib instance created")
+print("[*] Neo Lib is now ready to load addons")
 
 -- Colors for printing
 local baseColor = Color(255, 255, 255)
@@ -76,9 +72,9 @@ function NeoLib.PreloadFile(addon_name, preload)
     for _, content in pairs(preload) do
         local target = content[1]
         local file = content[2]
-        if target != "sh" or target != "sv" or target != "cl" then
+        if not target == "sh" or not target == "sv" or not target == "cl" then
             print("[!] Failed to preload "..file.." because target '"..target.."' is invalid")
-            return
+            return 
         end
         target = addon_name.."/"..target.."/"
         preloadedFiles[file] = true
@@ -86,34 +82,31 @@ function NeoLib.PreloadFile(addon_name, preload)
     end
 end
 
-function NeoLib.Initialize(addon_name, addon_version, preload, custom)
+function NeoLib.Initialize(addon_name, addon_version, preload)
     -- Init vars
     loadedFiles = 0
     preloadedFiles = {}
     preload = preload or {}
 
     -- Dirs Name
-    shared_dir = string.lower(addon_name).."/sh/"
-    client_dir = string.lower(addon_name).."/cl/"
-    server_dir = string.lower(addon_name).."/sv/"
+    local shared_dir = string.lower(addon_name).."/sh/"
+    local client_dir = string.lower(addon_name).."/cl/"
+    local server_dir = string.lower(addon_name).."/sv/"
 
-    -- Only display messages if directories exsist
-    if CLIENT and not file.Exists(client_dir) and not file.Exists(shared_dir) then return end
+    -- Prevent blank messages
+    if CLIENT and not file.Exists(client_dir.."*", "LUA") and not file.Exists(shared_dir.."*", "LUA") then return end
     local banner = "=============== "..addon_name.." - "..addon_version.." ==============="
-    -- Start of banner
     PrintC(banner)
     -- Preload
-    NeoLib.Preload(addon_name, preload)
-    -- Shared
-    NeoLib.LoadDirectory(share_dir)
+    NeoLib.PreloadFile(addon_name, preload)
     -- Server
     if SERVER then
         NeoLib.LoadDirectory(server_dir)
     end
+    -- Shared
+    NeoLib.LoadDirectory(shared_dir)
     -- Client
     NeoLib.LoadDirectory(client_dir)
-    --end of banner
-    PrintC("Preloaded "..#preloadedFiles.." lua files", "COMPLETE")
     PrintC("Loaded "..loadedFiles.." lua files", "COMPLETE")
     PrintC(string.rep("=", #banner).."\n")
 end

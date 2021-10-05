@@ -1,14 +1,5 @@
 local addon_name = "addon_name" -- eg ULX
 local addon_version = "addon_version" -- eg 1.0
-local retries = 0
-local LIMIT = 10
-
--- Prevent the file from loading before the lib
-while not NeoLib and retries<=LIMIT do
-    timer.Simple(0.5, function()
-        retries = retries + 1
-    end)
-end
 
 if NeoLib then 
     --[[
@@ -23,5 +14,5 @@ if NeoLib then
 
     NeoLib.Initialize(addon_name, addon_version, preload)
 else
-    print("[!] Cannot load "..addon_name.." after "..retries_count.." retries")    
+    print("[!] Cannot load "..addon_name.." (NeoLib missing)")    
 end
