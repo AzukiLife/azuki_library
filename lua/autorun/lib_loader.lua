@@ -58,7 +58,7 @@ function NeoLib.LoadFile(directory, file, log)
 end
 
 -- Load all files from a given directory
-function NeoLib.LoadAllFiles(directory)
+function NeoLib.LoadDirectory(directory)
     local files, dirs = file.Find(directory.."*", "LUA")
     -- Loop trough all files in the current dir
     for _, file in ipairs(files) do
@@ -66,9 +66,8 @@ function NeoLib.LoadAllFiles(directory)
             NeoLib.LoadFile(directory, file, true)
         end
     end
-    -- Recursivity
     for _, dir in ipairs(dirs) do
-        NeoLib.LoadAllFiles(directory..dir.."/")
+        NeoLib.LoadDirectory(directory..dir.."/")
     end
 end
 
@@ -104,13 +103,13 @@ function NeoLib.Initialize(addon_name, addon_version, preload, custom)
     -- Preload
     NeoLib.Preload(addon_name, preload)
     -- Shared
-    NeoLib.LoadAllFiles(share_dir)
+    NeoLib.LoadDirectory(share_dir)
     -- Server
     if SERVER then
-        NeoLib.LoadAllFiles(server_dir)
+        NeoLib.LoadDirectory(server_dir)
     end
     -- Client
-    NeoLib.LoadAllFiles(client_dir)
+    NeoLib.LoadDirectory(client_dir)
     --end of banner
     PrintC("Loaded "..loadedFiles.." files !", "COMPLETE")
     PrintC(string.rep("=", #banner).."\n")

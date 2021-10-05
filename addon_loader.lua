@@ -1,26 +1,27 @@
 local addon_name = "addon_name" -- eg ULX
 local addon_version = "addon_version" -- eg 1.0
+local retries = 0
+local LIMIT = 10
+
+-- Prevent the file from loading before the lib
+while not NeoLib and retries<=LIMIT do
+    timer.Simple(0.5, function()
+        retries = retries + 1
+    end)
+end
 
 if NeoLib then 
     --[[
-        If your system need to load certain files first, add them like this in preload table.
-        You can load anything from client to server, file will load properly
+        If your addon need to load certain files first, add them like this in preload table.
+        You can load anything from client to server, file will load in the order you give them.
+        Note: File loads one time only, don't worry
     ]] 
     local preload = {
         -- {folder, file}
-        {"name/sh/", "config.lua"} -- Also accept "/sh/" for folder name but not "sh" or "sh/"
+        {"addon_name/sh/", "config.lua"} -- Also accept "/sh/" for folder name but not "sh" or "sh/"
     }
-    --[[
-        If your addon handle modules, you can include the path to the module
-        Modules have to be located under (lua/) modules/<name>
-        /!\ Module manager will load server, shared and client files in their respective directory (sv, sh, cl)
-    ]]
-    local module = {
-        -- {name, version, description}
-        { "name", "1.0", "Description" }, --example 1
-        { "name_2", "dev-0.6", "Another Description"} -- example 2
-    }
+
     NeoLib.Initialize(addon_name, addon_version, preload)
 else
-    print("[!] Cannot load "..addon_name.." (Missing Neo Lib)")    
+    print("[!] Cannot load "..addon_name.." after "..retries_count.." retries")    
 end
