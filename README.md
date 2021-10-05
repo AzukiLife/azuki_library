@@ -14,7 +14,7 @@ Client view :
 
 ## Features
 
-- Clean loading sequense
+- Clean loading sequence
 - Preload certain files (eg config files)
 - Load addon with beautiful message for both client and server
 - Make you addon folder look more professionnal
