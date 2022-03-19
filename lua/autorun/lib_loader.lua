@@ -1,16 +1,25 @@
-AzuLib = AzuLib or {}
+AuzkiLibrary = AuzkiLibrary or {}
 
---[[
-    @author brv
-    @date 03/10/2021
-]]
+-- ~ brv
 
 -- Counter for all files loaded
 local loadedFiles = 0
 -- Preloaded file table
 local preloadedFiles = {}
 
-print("[*] Neo Lib is now ready to load addons")
+-- Hooks definitions
+hook.Add("AzukiLibrary:Loading", "__AzukiLibrary:Loading", function() -- Loading this file
+    MsgC(Color(255, 255, 255), "(-) ", Color(161, 99, 212),"Azuki Library",Color(255, 255, 255)," is preparing\n")
+end)
+hook.Add("AuzkiLibrary:Loaded", "__AzukiLibrary:Loaded", function() -- This file finished loading
+    MsgC(Color(255, 255, 255), "(~) ",Color(161, 99, 212),"Azuki Library",Color(255, 255, 255)," is loaded\n")
+end)
+hook.Add("AuzkiLibrary:Ready", "__AzukiLibrary:Ready") -- GM:PreGamemodeLoaded is called, this hook is called too
+hook.Add("AuzkiLibrary:AddonsLoaded", "__AzukiLibrary:AddonsLoaded", function (addon_name, addon)
+
+end) -- All the addons finished loading.
+
+hook.Run("AzukiLibrary:Loading")
 
 -- Colors for printing
 local baseColor = Color(255, 255, 255)
@@ -23,20 +32,20 @@ local completeColor = Color(84, 185, 143)
 local function PrintC(message, prefix)
     if prefix then prefix = "("..prefix..") " else prefix = "" end
     if string.match(prefix, "SERVER") then
-        MsgC(baseColor, "[AzuLib] ", serverColor, prefix, baseColor, message.."\n")
+        MsgC(baseColor, "[AzLib] ", serverColor, prefix, baseColor, message.."\n")
     elseif string.match(prefix, "CLIENT") then
-        MsgC(baseColor, "[AzuLib] ", clientColor, prefix, baseColor, message.."\n")
+        MsgC(baseColor, "[AzLib] ", clientColor, prefix, baseColor, message.."\n")
     elseif string.match(prefix, "SHARED") then
-        MsgC(baseColor, "[AzuLib] ", sharedColor, prefix, baseColor, message.."\n")
+        MsgC(baseColor, "[AzLib] ", sharedColor, prefix, baseColor, message.."\n")
     elseif string.match(prefix, "COMPLETE") then
-        MsgC(baseColor, "[AzuLib] ", completeColor, prefix, baseColor, message.."\n")
+        MsgC(baseColor, "[AzLib] ", completeColor, prefix, baseColor, message.."\n")
     else
-        MsgC(baseColor, "[AzuLib] "..prefix..message.."\n")
+        MsgC(baseColor, "[AzLib] "..prefix..message.."\n")
     end
 end
 
 -- Load a file from a given directory and file
-function AzuLib.LoadFile(directory, file, log)
+function AuzkiLibrary.LoadFile(directory, file, log)
     loadedFiles = loadedFiles + 1
     local author
     if log then  
@@ -53,36 +62,36 @@ function AzuLib.LoadFile(directory, file, log)
 end
 
 -- Load all files from a given directory
-function AzuLib.LoadDirectory(directory)
+function AuzkiLibrary.LoadDirectory(directory)
     local files, dirs = file.Find(directory.."*", "LUA")
     -- Loop trough all files in the current dir
     for _, file in ipairs(files) do
         if string.match(file, ".lua") and !preloadedFiles[file] then
-            AzuLib.LoadFile(directory, file, true)
+            AuzkiLibrary.LoadFile(directory, file, true)
         end
     end
     for _, dir in ipairs(dirs) do
-        AzuLib.LoadDirectory(directory..dir.."/")
+        AuzkiLibrary.LoadDirectory(directory..dir.."/")
     end
 end
 
 -- Preload Function
-function AzuLib.PreloadFile(addon_name, preload)
+function AuzkiLibrary.PreloadFile(addon_name, preload)
     if not preload then return end -- Preload = nil
     for _, content in pairs(preload) do
         local target = content[1]
         local file = content[2]
-        if target != "sh" or target != "sv" or target != "cl" then
+        if target != "sh" and target != "sv" and target != "cl" then
             print("[!] Failed to preload "..file.." because target '"..target.."' is invalid")
             return 
         end
         target = addon_name.."/"..target.."/"
         preloadedFiles[file] = true
-        AzuLib.LoadFile(target, file, true)
+        AuzkiLibrary.LoadFile(target, file, true)
     end
 end
 
-function AzuLib.Initialize(addon_name, addon_version, preload)
+function AuzkiLibrary.Initialize(addon_name, addon_version, preload)
     -- Init vars
     loadedFiles = 0
     preloadedFiles = {}
@@ -98,22 +107,29 @@ function AzuLib.Initialize(addon_name, addon_version, preload)
     local banner = "=============== "..addon_name.." - "..addon_version.." ==============="
     PrintC(banner)
     -- Preload
-    AzuLib.PreloadFile(addon_name, preload)
+    AuzkiLibrary.PreloadFile(addon_name, preload)
     -- Server
     if SERVER then
-        AzuLib.LoadDirectory(server_dir)
+        AuzkiLibrary.LoadDirectory(server_dir)
     end
     -- Shared
-    AzuLib.LoadDirectory(shared_dir)
+    AuzkiLibrary.LoadDirectory(shared_dir)
     -- Client
-    AzuLib.LoadDirectory(client_dir)
+    AuzkiLibrary.LoadDirectory(client_dir)
     PrintC("Loaded "..loadedFiles.." lua files", "COMPLETE")
     PrintC(string.rep("=", #banner).."\n")
 end
 
-function AzuLib.ThrowError(addon_name, message)
+function AuzkiLibrary.ThrowError(addon_name, message)
     print("")
     print("["..addon_name.."] Thrown an error : ")
     print("[!] "..message)
     print("")
 end
+
+hook.Run("AuzkiLibrary:Loaded")
+
+hook.Add("PreGamemodeLoaded", "__AzukiLibrary-Waiting", function()
+    MsgC(Color(255, 255, 255), "(!) ",Color(161, 99, 212),"Azuki Library",Color(255, 255, 255)," should be ready to load addons\n")
+    hook.Run("AuzkiLibrary:Ready")
+end)
