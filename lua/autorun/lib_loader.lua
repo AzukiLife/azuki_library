@@ -76,7 +76,7 @@ function AzuLib.PreloadFile(addon_name, preload)
             print("[!] Failed to preload "..file.." because target '"..target.."' is invalid")
             return 
         end
-        target = addon_name..target
+        target = addon_name.."/"..target.."/"
         preloadedFiles[file] = true
         AzuLib.LoadFile(target, file, true)
     end
@@ -112,11 +112,8 @@ function AzuLib.Initialize(addon_name, addon_version, preload)
 end
 
 function AzuLib.ThrowError(addon_name, message)
-    if addon_name and message then
-        print("")
-        print("")
-        print("")
-    else
-        return 
-    end
+    print("")
+    print("["..addon_name.."] Thrown an error : ")
+    print("[!] "..message)
+    print("")
 end
