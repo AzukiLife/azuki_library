@@ -1,4 +1,4 @@
-# 🔧 Azuki Lib
+# 🔧 Azuki Library
 
 This library is a pretty and clean way to load lua files for GMod server (also support client).
 So you don't have to put "include" and "AddCSLuaFile" everywhere!
