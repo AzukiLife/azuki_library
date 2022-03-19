@@ -1,4 +1,4 @@
-NeoLib = NeoLib or {}
+AzuLib = AzuLib or {}
 
 --[[
     @author brv
@@ -23,20 +23,20 @@ local completeColor = Color(84, 185, 143)
 local function PrintC(message, prefix)
     if prefix then prefix = "("..prefix..") " else prefix = "" end
     if string.match(prefix, "SERVER") then
-        MsgC(baseColor, "[NeoLib] ", serverColor, prefix, baseColor, message.."\n")
+        MsgC(baseColor, "[AzuLib] ", serverColor, prefix, baseColor, message.."\n")
     elseif string.match(prefix, "CLIENT") then
-        MsgC(baseColor, "[NeoLib] ", clientColor, prefix, baseColor, message.."\n")
+        MsgC(baseColor, "[AzuLib] ", clientColor, prefix, baseColor, message.."\n")
     elseif string.match(prefix, "SHARED") then
-        MsgC(baseColor, "[NeoLib] ", sharedColor, prefix, baseColor, message.."\n")
+        MsgC(baseColor, "[AzuLib] ", sharedColor, prefix, baseColor, message.."\n")
     elseif string.match(prefix, "COMPLETE") then
-        MsgC(baseColor, "[NeoLib] ", completeColor, prefix, baseColor, message.."\n")
+        MsgC(baseColor, "[AzuLib] ", completeColor, prefix, baseColor, message.."\n")
     else
-        MsgC(baseColor, "[NeoLib] "..prefix..message.."\n")
+        MsgC(baseColor, "[AzuLib] "..prefix..message.."\n")
     end
 end
 
 -- Load a file from a given directory and file
-function NeoLib.LoadFile(directory, file, log)
+function AzuLib.LoadFile(directory, file, log)
     loadedFiles = loadedFiles + 1
     local author
     if log then  
@@ -53,36 +53,36 @@ function NeoLib.LoadFile(directory, file, log)
 end
 
 -- Load all files from a given directory
-function NeoLib.LoadDirectory(directory)
+function AzuLib.LoadDirectory(directory)
     local files, dirs = file.Find(directory.."*", "LUA")
     -- Loop trough all files in the current dir
     for _, file in ipairs(files) do
         if string.match(file, ".lua") and !preloadedFiles[file] then
-            NeoLib.LoadFile(directory, file, true)
+            AzuLib.LoadFile(directory, file, true)
         end
     end
     for _, dir in ipairs(dirs) do
-        NeoLib.LoadDirectory(directory..dir.."/")
+        AzuLib.LoadDirectory(directory..dir.."/")
     end
 end
 
 -- Preload Function
-function NeoLib.PreloadFile(addon_name, preload)
+function AzuLib.PreloadFile(addon_name, preload)
     if not preload then return end -- Preload = nil
     for _, content in pairs(preload) do
         local target = content[1]
         local file = content[2]
-        if not target == "sh" or not target == "sv" or not target == "cl" then
+        if target != "sh" or target != "sv" or target != "cl" then
             print("[!] Failed to preload "..file.." because target '"..target.."' is invalid")
             return 
         end
-        target = addon_name.."/"..target.."/"
+        target = addon_name..target
         preloadedFiles[file] = true
-        NeoLib.LoadFile(target, file, true)
+        AzuLib.LoadFile(target, file, true)
     end
 end
 
-function NeoLib.Initialize(addon_name, addon_version, preload)
+function AzuLib.Initialize(addon_name, addon_version, preload)
     -- Init vars
     loadedFiles = 0
     preloadedFiles = {}
@@ -98,15 +98,25 @@ function NeoLib.Initialize(addon_name, addon_version, preload)
     local banner = "=============== "..addon_name.." - "..addon_version.." ==============="
     PrintC(banner)
     -- Preload
-    NeoLib.PreloadFile(addon_name, preload)
+    AzuLib.PreloadFile(addon_name, preload)
     -- Server
     if SERVER then
-        NeoLib.LoadDirectory(server_dir)
+        AzuLib.LoadDirectory(server_dir)
     end
     -- Shared
-    NeoLib.LoadDirectory(shared_dir)
+    AzuLib.LoadDirectory(shared_dir)
     -- Client
-    NeoLib.LoadDirectory(client_dir)
+    AzuLib.LoadDirectory(client_dir)
     PrintC("Loaded "..loadedFiles.." lua files", "COMPLETE")
     PrintC(string.rep("=", #banner).."\n")
+end
+
+function AzuLib.ThrowError(addon_name, message)
+    if addon_name and message then
+        print("")
+        print("")
+        print("")
+    else
+        return 
+    end
 end

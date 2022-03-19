@@ -1,4 +1,4 @@
-# 🔧 Neo Lib 
+# 🔧 Azuki Lib
 
 This library is a pretty and clean way to load lua files for GMod server (also support client).
 So you don't have to put "include" and "AddCSLuaFile" everywhere!
@@ -24,7 +24,7 @@ Client view :
 
 - First, place the loader code into `autorun/` name it as you like 
     - Like so `autorun/addon_loader.lua`
-    - Content is [here](https://github.com/NeoTokyoRP/neo_lib/blob/master/addon_loader.lua) (You should edit the default fields to match your addon)
+    - Content is [here](https://github.com/AzukiLife/azuki_lib/blob/master/addon_loader.lua) (You should edit the default fields to match your addon)
 - Create `addon_name/sv/`, `addon_name/sh/` and `addon_name/cl/` (you can rid of any of them if needed!)
 - Finally, you should have something like this : 
 
