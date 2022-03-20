@@ -5,11 +5,11 @@ So you don't have to put "include" and "AddCSLuaFile" everywhere!
 
 Server view :
 
-![Server View](https://i.imgur.com/Zsd1wKz.png)
+![alib-dedicated](https://user-images.githubusercontent.com/52861120/159180117-416672bd-ac09-4850-8d86-7da26ee3c600.png)
 
 Client view :
 
-![Client View](https://i.imgur.com/CbORL6a.png)
+![alib-ingame](https://user-images.githubusercontent.com/52861120/159180115-8f62085c-d819-4e5c-bb94-9f5e9ead5792.png)
 
 ## ✅ Features
 
@@ -43,12 +43,12 @@ You can easily create a module:
 - Add `module/module_name` directory (You can add as many as you want)
 - Create `module/module_name/sv/`, `module/module_name/sh/` and `module/module_name/cl/` (you can rid of any of them if needed!)
 - ⚠️ **WARNING** do not put your module in `addon/module_name/...`! Or your files will not be loaded
+- The core functionning is not determined yet
 
 ## TODO
 
 - [ ] Modules manager system
-- [ ] Detect presence of undetected files
+- [ ] Detect presence of misplaced files
 - [ ] Callback for a specific file loaded / and or a hook call
 - [ ] Entity loader
-- [ ] Resources manager
 - [ ] Make so files in addons managed by the loader can have the same name (from different addon) -> [Wiki](https://wiki.facepunch.com/gmod/Global.include)

@@ -9,10 +9,10 @@ local preloadedFiles = {}
 
 -- Hooks definitions
 hook.Add("AzukiLibrary:Loading", "__AzukiLibrary:Loading", function() -- Loading this file
-    MsgC(Color(255, 255, 255), "(-) ", Color(161, 99, 212),"Azuki Library",Color(255, 255, 255)," is preparing\n")
+    MsgC(Color(255, 255, 255), "(", Color(161, 99, 212),"Azuki Library",Color(255, 255, 255),") Preparing...\n")
 end)
 hook.Add("AzukiLibrary:Loaded", "__AzukiLibrary:Loaded", function() -- This file finished loading
-    MsgC(Color(255, 255, 255), "(~) ",Color(161, 99, 212),"Azuki Library",Color(255, 255, 255)," is loaded\n")
+    MsgC(Color(255, 255, 255), "(", Color(161, 99, 212),"Azuki Library",Color(255, 255, 255),") Loaded!\n")
 end)
 hook.Add("AzukiLibrary:Ready", "__AzukiLibrary:Ready") -- GM:PreGamemodeLoaded is called, this hook is called too
 hook.Add("AzukiLibrary:AddonsLoaded", "__AzukiLibrary:AddonsLoaded", function (addon_name, addon)
@@ -120,9 +120,9 @@ function AzukiLibrary.Initialize(addon_name, addon_version, preload)
     PrintC(string.rep("=", #banner).."\n")
 end
 
-function AzukiLibrary.ThrowError(addon_name, message)
+function AzukiLibrary.ThrowError(message)
     print("")
-    print("["..addon_name.."] Thrown an error : ")
+    print("Azuki Library thrown an error : ")
     print("[!] "..message)
     print("")
 end
@@ -130,6 +130,6 @@ end
 hook.Run("AzukiLibrary:Loaded")
 
 hook.Add("PreGamemodeLoaded", "__AzukiLibrary-Waiting", function()
-    MsgC(Color(255, 255, 255), "(!) ",Color(161, 99, 212),"Azuki Library",Color(255, 255, 255)," should be ready to load addons\n")
+    MsgC(Color(255, 255, 255), "(", Color(161, 99, 212), "Azuki Library",Color(255, 255, 255),") Should be ready to load addons\n")
     hook.Run("AzukiLibrary:Ready")
 end)
