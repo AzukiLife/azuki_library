@@ -11,7 +11,7 @@ Client view :
 
 ![Client View](https://i.imgur.com/CbORL6a.png)
 
-## Features
+## ✅ Features
 
 - Clean loading sequence
 - Preload certain files (eg config files)
@@ -19,7 +19,7 @@ Client view :
 - Make you addon folder look more professionnal
 - Every file is properly loaded
 
-## Use this lib
+## 🗒️ Use this lib
 
 - First, place the loader code into `autorun/` name it as you like
   - Like so `autorun/addon_loader.lua`
@@ -29,7 +29,11 @@ Client view :
 
 ![Example](https://i.imgur.com/otc58l8.gif)
 
-## Modules (TODO)
+### Notes
+
+Every file should have a different name. You should prefix all the file with a smaller version of the addon's name. Example : `AzukiCore -> aco_config.lua`
+
+## 📦 Modules (work in progress)
 
 Modules works exaclty the same as your addon is working. Its like a sub-addon you don't want to separate from your main addon.
 You can imagine something like DLCs (additionnal content for your addon) that a player can install, all yours modules are base on the main addon, but the main addon can work without them.
@@ -42,8 +46,9 @@ You can easily create a module:
 
 ## TODO
 
-- [ ] Preload array working with path, not only file name
-- [x] New function to preload a file (see main)
-- [x] Move addon_loader code to a file in the repo
-- [ ] Make so files in addons managed by the loader can have the same name (from different addon)
 - [ ] Modules manager system
+- [ ] Detect presence of undetected files
+- [ ] Callback for a specific file loaded / and or a hook call
+- [ ] Entity loader
+- [ ] Resources manager
+- [ ] Make so files in addons managed by the loader can have the same name (from different addon) -> [Wiki](https://wiki.facepunch.com/gmod/Global.include)
